@@ -28,7 +28,7 @@ This design has the following properties:
  - Standard ProMicro support (Note that it's wireless only, so use a compatible MCU with Bluetooth connectivity)
 
 
-In short, this design is heavily inspired by the [Ferris](https://github.com/pierrechevalier83/ferris) (or more specifically, the [Sweep](https://github.com/davidphilipbarr/Sweep). This keyboard is very similar with a few key design differences:
+In short, this design is heavily inspired by the [Ferris](https://github.com/pierrechevalier83/ferris) (or more specifically, the [Sweep](https://github.com/davidphilipbarr/Sweep)). This keyboard is very similar with a few key design differences:
  - Stagger adjusted for hands that have a short index finger
  - Outer columns are splayed
  - Removed one key from innermost column, and heavily increased columnar stagger of that column
