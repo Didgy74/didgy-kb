@@ -1,0 +1,481 @@
+units:
+  choc_cutout_width: 14
+  choc_cutout_height: choc_cutout_width
+  
+  promicro_width: 18
+  promicro_height: 38
+  mcuarea_width: promicro_width
+  mcuarea_height: promicro_height
+  mcuarea_bottom_offset_height: 3
+  mcuarea_outermargin: 0.5
+  componentarea_width: mcuarea_width + 1
+  componentarea_height: mcuarea_height - mcuarea_bottom_offset_height
+  
+  
+  # Configurable values
+  keyspacingx: cx
+  keyspacingy: cy
+  key_outermargin: 1
+  keycap_width: keyspacingx - 0.5
+  keycap_height: keyspacingy - 0.5
+  choc_keycap_cornerradius: 2
+  key_chocsocket_margin: 1
+  outline_corner_radius: 2
+  screwhole_radius: 1
+  resetswitch_margin: 10
+  reset_power_spacing: 10
+  componentarea_offsety: -3
+  thumbfan_outer_rotate: -15
+  thumbfan_offsety: 0
+  
+  visual_x: 1
+  visual_y: 1
+  
+
+points:
+
+  zones:
+    matrix:
+      key:
+        padding: keyspacingy
+        width: keyspacingx
+        height: keyspacingy
+        tags:
+          is_key: true
+          key_1u: true
+          
+        # Footprints for key-switches.  
+        footprints: &key_footprints
+          choc_hotswap:
+            type: choc
+            params:
+              hotswap: true
+              reverse: true
+              keycaps: true
+            nets:
+              from: GND
+              to: =button_pin
+      columns:
+        pinky:
+          rotate: 15
+          rows:
+            bottom:
+              button_pin: P7
+            home:
+              button_pin: P15
+            topmost:
+              button_pin: P6
+        ring:
+          rotate: -10
+          stagger: 10
+          spread: keyspacingx + 1.5
+          rows:
+            bottom:
+              button_pin: P10
+            home:
+              button_pin: P18
+            topmost:
+              button_pin: P5
+        middle:
+          rotate: -5
+          stagger: 3
+          spread: keyspacingx + 0.75
+          rows:
+            bottom:
+              button_pin: P16
+            home:
+              button_pin: P19
+            topmost:
+              button_pin: P4
+        index:
+          stagger: -7
+          spread: keyspacingx
+          rows:
+            bottom:
+              button_pin: P14
+            home:
+              button_pin: P20
+            topmost:
+              button_pin: P3
+        innermost:
+          stagger: keyspacingy - 8
+          spread: keyspacingx
+          rows:
+            bottom:
+              button_pin: P21
+            topmost:
+              button_pin: P2
+    thumbfan:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [0.5 keyspacingy, -0.5 keyspacingy - 0.5 keyspacingx]
+      key:
+        width: keyspacingx
+        height: keyspacingy
+        tags.is_key: true
+        rotate: 90
+        footprints: *key_footprints
+      columns:
+        near:
+          rows:
+            default:
+              tags.key_1u: true
+              button_pin: P8
+        home:
+          origin: [-0.5 keyspacingy, -0.5 keyspacingx]
+          spread: keyspacingy
+          rotate: thumbfan_outer_rotate
+          key.width: 1.5 keyspacingx
+          rows:
+            default:
+              tags.key_15u: true
+              button_pin: P9
+          
+          
+
+    componentarea:
+      anchor:
+        - ref: thumbfan_home_default
+          shift: [ 0.75 keyspacingx, 0.5 keyspacingy ]
+          affect: y
+        - shift: [ 0, 0.5 componentarea_height ]
+        - ref: matrix_innermost_bottom
+          affect: x
+          shift: [ 0.5 keyspacingx + key_chocsocket_margin + 0.5 componentarea_width, 0 ]
+      key:
+        width: componentarea_width
+        height: componentarea_height
+        tags.is_key: false
+          
+    mcu:
+      anchor:
+        ref: componentarea_default_default
+        shift: 
+          - 0.5 componentarea_width - 0.5 mcuarea_width - mcuarea_outermargin
+          - 0.5 componentarea_height - 0.5 mcuarea_height
+      key:
+        tags:
+          is_key: false
+          
+    resetswitch:
+      anchor:
+        - ref: thumbfan_near_default
+          affect: x
+        - shift: [-(0.5 keyspacingy + resetswitch_margin), 0]
+        - ref: matrix_pinky_bottom
+          affect: y
+          shift: [ 0.5 keyspacingx + key_outermargin, -0.5 keyspacingy ]
+        - shift: [ 0, 4 ] # Add some shift to move the component inside the outline.
+      key:
+        width: 5
+        height: 5
+        tags.is_key: false
+          
+          
+    powerswitch:
+      anchor:
+         - ref: resetswitch_default_default
+           shift: [0, -4] # Negate the shift we specified in the resetswitch above.
+         - shift: [ -reset_power_spacing, 0 ]
+         - shift: [ 0, 3 ] # Add some shift to move the component inside the outline. 
+      key:
+        tags:
+          is_key: false
+        
+  
+
+
+
+
+
+outlines:
+  exports:
+
+    # Outline of keycaps. Only meant for visualization.
+    keycaps:
+      main:
+        type: keys
+        side: left
+        size: [ keycap_width, keycap_height ]
+        bound: false
+        corner: choc_keycap_cornerradius
+        tags: [key_1u]
+      main2:
+        type: keys
+        side: left
+        size: [ 1.5 keycap_width, keycap_height ]
+        bound: false
+        corner: choc_keycap_cornerradius
+        tags: [key_15u]
+        
+        
+    matrix_outline: 
+      - type: polygon
+        points:
+          # We start at the bottom left, and move our way around
+          - ref: matrix_pinky_bottom
+            shift: [ -(0.5 keyspacingx + key_chocsocket_margin), -(0.5 keyspacingy + key_outermargin)]
+          - ref: matrix_pinky_bottom
+            shift: [ 0.5 keyspacingx + key_outermargin, -(0.5 keyspacingy + key_outermargin)]
+          - ref: matrix_index_bottom
+            affect: y
+            shift: [ -(0.5 keyspacingx + key_outermargin), -(0.5 keyspacingy + key_outermargin)]
+          - ref: matrix_index_bottom
+            shift: [ -(0.5 keyspacingx + key_outermargin), -(0.5 keyspacingy + key_outermargin)]
+          - ref: matrix_index_bottom
+            shift: [ 0.5 keyspacingx + key_outermargin, -(0.5 keyspacingy + key_outermargin)]
+          - ref: matrix_innermost_bottom
+            shift: [ 0.5 keyspacingx + key_chocsocket_margin, -(0.5 keyspacingy + key_outermargin)]
+            affect: x
+         # Then we move across the top
+          - ref: matrix_innermost_topmost
+            shift: [ 0.5 keyspacingx + key_chocsocket_margin, 0.5 keyspacingy + key_outermargin]
+          - ref: matrix_index_topmost
+            shift: [ 0.5 keyspacingx + key_outermargin, 0.5 keyspacingy + key_outermargin]
+          - ref: matrix_middle_topmost
+            shift: [ 0.5 keyspacingx + key_outermargin, 0.5 keyspacingy + key_outermargin]
+          - ref: matrix_middle_topmost
+            shift: [ -(0.5 keyspacingx + key_outermargin), 0.5 keyspacingy + key_outermargin]
+          - ref: matrix_ring_topmost
+            shift: [ -(0.5 keyspacingx + key_outermargin), 0.5 keyspacingy + key_outermargin]
+          - ref: matrix_pinky_topmost
+            shift: [ -(0.5 keyspacingx + key_chocsocket_margin), 0.5 keyspacingy + key_outermargin]
+
+    thumbfan_outline:
+      - type: polygon
+        points:
+          # Bottom left of near thumb
+          - ref: thumbfan_near_default
+            shift: [ -(0.5 keyspacingx + key_outermargin), (0.5 keyspacingy + key_outermargin)]
+          #- ref: thumbfan_near_default
+          #  shift: [ 0.5 keyspacingx, -0.5 keyspacingy]  
+          - ref: thumbfan_home_default
+            shift: [ -0.75 keyspacingx, 0.5 keyspacingy]
+          - ref: thumbfan_home_default
+            shift: [ -0.75 keyspacingx, -(0.5 keyspacingy + key_outermargin)]
+          - ref: thumbfan_home_default
+            shift: [ 0.75 keyspacingx, -(0.5 keyspacingy + key_outermargin)]
+          - ref: thumbfan_home_default
+            shift: [ 0.75 keyspacingx, 0.5 keyspacingy]
+          - ref: thumbfan_near_default
+            shift: [ (0.5 keyspacingx + key_outermargin), 0.5 keyspacingy + key_outermargin]
+
+    matrix_thumbfan_glue: 
+      - type: polygon
+        points:
+          - ref: thumbfan_home_default
+            shift: [ 0.75 keyspacingx, 0 ]
+          - ref: thumbfan_home_default
+            shift: [ 0.75 keyspacingx, 0.5 keyspacingy + 5 ]
+          - ref: thumbfan_near_default
+            shift: [ -0.5 keyspacingx, 0 ]
+            affect: x
+          - ref: thumbfan_near_default
+            shift: [ -0.5 keyspacingx, 0 ]
+            affect: y
+
+    raw:
+      add_matrix_outline:
+        name: matrix_outline
+        operation: add
+      add_thumbfan_outline:
+        name: thumbfan_outline
+        operation: add
+      add_matrix_thumbfan_glue:
+        name: matrix_thumbfan_glue
+        operation: add
+
+    raw_bottom_wristarea:
+      - type: polygon
+        points:
+          - ref: matrix_pinky_bottom
+            shift: [ 0.5 keyspacingx + key_outermargin, -(0.5 keyspacingy + key_outermargin)]
+          - ref: thumbfan_near_default
+            affect: x
+            shift: [ -0.5 keyspacingx + key_outermargin - 5, 0.5 keyspacingy + key_outermargin]
+          - ref: thumbfan_near_default
+            shift: [ -(0.5 keyspacingx + key_outermargin), -(0.5 keyspacingy + key_outermargin)]
+          - ref: matrix_middle_bottom
+            affect: y
+            shift: [ 0, -0.5 keyspacingy]
+          - ref: matrix_pinky_home
+            affect: x
+            shift: [ 0.5 keyspacingx + key_outermargin, 0.5 keyspacingy + key_outermargin]
+          
+    raw_bottom:
+      main:
+        name: raw
+        operation: add
+      add_wristarea:
+        name: raw_bottom_wristarea
+        operation: add
+
+    # Right side area for components
+    _componentarea:
+      - type: polygon
+        points:
+          - ref: componentarea_default_default
+            shift: [ 0.5 componentarea_width, 0.5 componentarea_height ]
+          - ref: componentarea_default_default
+            shift: [ -0.5 componentarea_width, 0.5 componentarea_height ]
+          - ref: componentarea_default_default
+            shift: [ -0.5 componentarea_width, -0.5 componentarea_height ]
+          - ref: componentarea_default_default
+            shift: [ 0.5 componentarea_width, -0.5 componentarea_height]
+
+    componentarea_bottom_glue:
+      - type: polygon
+        points:
+          - ref: thumbfan_home_default
+            shift: [ 0.75 keyspacingx, -(0.5 keyspacingy + key_outermargin)]
+          - ref: componentarea_default_default
+            shift: [ 0.5 componentarea_width, -0.5 componentarea_height ]
+          - ref: componentarea_default_default
+            shift: [ -0.5 componentarea_width, 0.5 componentarea_height ]
+          - ref: matrix_innermost_bottom
+            affect: x
+          - ref: thumbfan_near_default
+            shift: [ -0.5 keyspacingx, -0.5 keyspacingy ]
+              
+
+    # Switch holes for mount plate
+    _switch_cutout:
+      - type: keys
+        side: left
+        size: [ choc_cutout_width, choc_cutout_height ]
+        bound: false
+        tags: [key_1u, key_15u]
+        
+    _screwholes:
+      # Bottom right
+      - type: circle
+        anchor:
+          - ref: [matrix_innermost_bottom, thumbfan_near_default]
+            affect: y
+          - ref: matrix_innermost_bottom
+            affect: x
+        radius: screwhole_radius
+      # Top right
+      - type: circle
+        anchor:
+          - ref: matrix_index_topmost
+            shift: [ 0.5 keyspacingx, -0.5 keyspacingy]
+        radius: screwhole_radius
+      # Top left
+      - type: circle
+        anchor:
+          - ref: matrix_ring_topmost
+            shift: [ -0.5 keyspacingx - 2, -0.5 keyspacingy]
+        radius: screwhole_radius
+      # Bottom left
+      - type: circle
+        anchor:
+          - ref: matrix_pinky_bottom
+            shift: [ 0.5 keyspacingx + 0.5, 0.5 keyspacingy]
+        radius: screwhole_radius    
+
+    plate_nofillet_nocutouts:
+      main:
+        name: raw
+        
+    _plate_nocutouts:
+      - type: outline
+        name: plate_nofillet_nocutouts
+        fillet: outline_corner_radius
+        
+    plate:
+      main:
+        name: _plate_nocutouts
+      cut_out_switches:
+        name: _switch_cutout
+        operation: subtract
+      cut_out_screwholes:
+        name: _screwholes
+        operation: subtract
+
+
+    bottom_nofillet:
+      main:
+        name: raw_bottom
+      add_component_area:
+        name: _componentarea
+        operation: add
+      add_componentarea_bottom_glue:
+        name: componentarea_bottom_glue
+        operation: add
+        
+    bottom:
+      main:
+        name: bottom_nofillet
+        fillet: outline_corner_radius
+      cut_out_screwholes:
+        name: _screwholes
+        operation: subtract
+        
+pcbs:
+  top_plate:
+    outlines:
+      edge:
+        outline: plate
+        layer: Edge.Cuts
+        
+  board:
+    outlines:
+      edge:
+        outline: bottom
+        layer: Edge.Cuts
+    footprints:
+      mcu:
+        type: promicro
+        params:
+          orientation: down
+        anchor:
+          ref: mcu_default_default
+          rotate: -90
+          
+      resetswitch:
+        type: button
+        anchor:
+          ref: resetswitch_default_default
+        params:
+          side: F
+        nets:
+          from: RST
+          to: GND
+      resetswitch_r:
+        type: button
+        anchor:
+          ref: resetswitch_default_default
+        params:
+          side: B
+        nets:
+          from: RST
+          to: GND
+          
+      slider:
+        type: slider
+        anchor:
+          ref: powerswitch_default_default
+          rotate: 180
+        params:
+          side: F
+        nets:
+          from: GND
+          to: Bminus
+      slider_r:
+        type: slider
+        anchor:
+          ref: powerswitch_default_default
+          rotate: 180
+        params:
+          side: B
+        nets:
+          from: GND
+          to: Bminus
+          
+cases:
+  plate_case:
+    - type: outline # default option
+      name: plate
+      extrude: 1.2
+      operation: add
