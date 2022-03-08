@@ -1,5 +1,5 @@
 units:
-  choc_cutout_width: 14
+  choc_cutout_width: 13.75
   choc_cutout_height: choc_cutout_width
   
   promicro_width: 18
@@ -7,8 +7,8 @@ units:
   mcuarea_width: promicro_width
   mcuarea_height: promicro_height
   mcuarea_bottom_offset_height: 3
-  mcuarea_outermargin: 0.5
-  componentarea_width: mcuarea_width + 1
+  mcuarea_outermargin: 0.25
+  componentarea_width: mcuarea_width + 0.5
   componentarea_height: mcuarea_height - mcuarea_bottom_offset_height
   
   
@@ -19,13 +19,13 @@ units:
   keycap_width: keyspacingx - 0.5
   keycap_height: keyspacingy - 0.5
   choc_keycap_cornerradius: 2
-  key_chocsocket_margin: 1
+  key_chocsocket_margin: 0.75
   outline_corner_radius: 2
   screwhole_radius: 1
   resetswitch_margin: 10
   reset_power_spacing: 10
   componentarea_offsety: -3
-  thumbfan_outer_rotate: -15
+  thumbfan_outer_rotate: -0
   thumbfan_offsety: 0
   
   visual_x: 1
@@ -57,7 +57,7 @@ points:
               to: =button_pin
       columns:
         pinky:
-          rotate: 15
+          rotate: 20
           rows:
             bottom:
               button_pin: P7
@@ -66,9 +66,10 @@ points:
             topmost:
               button_pin: P6
         ring:
-          rotate: -10
+          origin: [ -0.5 keyspacingx, -0.5 keyspacingy ]
+          rotate: -15
           stagger: 10
-          spread: keyspacingx + 1.5
+          spread: keyspacingx
           rows:
             bottom:
               button_pin: P10
@@ -77,9 +78,10 @@ points:
             topmost:
               button_pin: P5
         middle:
+          origin: [ -0.5 keyspacingx, -0.5 keyspacingy ]
           rotate: -5
           stagger: 3
-          spread: keyspacingx + 0.75
+          spread: keyspacingx
           rows:
             bottom:
               button_pin: P16
@@ -88,7 +90,7 @@ points:
             topmost:
               button_pin: P4
         index:
-          stagger: -7
+          stagger: -8
           spread: keyspacingx
           rows:
             bottom:
@@ -107,8 +109,12 @@ points:
               button_pin: P2
     thumbfan:
       anchor:
-        ref: matrix_index_bottom
-        shift: [0.5 keyspacingy, -0.5 keyspacingy - 0.5 keyspacingx]
+        - ref: matrix_index_bottom
+          shift: [0, -(0.5 keyspacingx + 0.5 keyspacingy)]
+          affect: y
+        - ref: matrix_innermost_bottom
+          shift: [0.5 keyspacingx, 0]
+          affect: x
       key:
         width: keyspacingx
         height: keyspacingy
@@ -116,20 +122,21 @@ points:
         rotate: 90
         footprints: *key_footprints
       columns:
-        near:
-          rows:
-            default:
-              tags.key_1u: true
-              button_pin: P8
         home:
-          origin: [-0.5 keyspacingy, -0.5 keyspacingx]
-          spread: keyspacingy
-          rotate: thumbfan_outer_rotate
           key.width: 1.5 keyspacingx
           rows:
             default:
               tags.key_15u: true
               button_pin: P9
+        near:
+          rotate: 15
+          origin: [ 0.5 keyspacingy, -0.5 keyspacingx ]
+          spread: -keyspacingy
+          rows:
+            default:
+              tags.key_1u: true
+              button_pin: P8
+
           
           
 
@@ -154,8 +161,8 @@ points:
           - 0.5 componentarea_width - 0.5 mcuarea_width - mcuarea_outermargin
           - 0.5 componentarea_height - 0.5 mcuarea_height
       key:
-        tags:
-          is_key: false
+        tags.is_key: false
+        
           
     resetswitch:
       anchor:
@@ -165,7 +172,7 @@ points:
         - ref: matrix_pinky_bottom
           affect: y
           shift: [ 0.5 keyspacingx + key_outermargin, -0.5 keyspacingy ]
-        - shift: [ 0, 4 ] # Add some shift to move the component inside the outline.
+        - shift: [ 0, 2 ] # Add some shift to move the component inside the outline.
       key:
         width: 5
         height: 5
@@ -177,8 +184,10 @@ points:
          - ref: resetswitch_default_default
            shift: [0, -4] # Negate the shift we specified in the resetswitch above.
          - shift: [ -reset_power_spacing, 0 ]
-         - shift: [ 0, 3 ] # Add some shift to move the component inside the outline. 
+         - shift: [ 0, 4 ] # Add some shift to move the component inside the outline. 
       key:
+        width: 5
+        height: 2
         tags:
           is_key: false
         
@@ -264,15 +273,11 @@ outlines:
       - type: polygon
         points:
           - ref: thumbfan_home_default
-            shift: [ 0.75 keyspacingx, 0 ]
-          - ref: thumbfan_home_default
-            shift: [ 0.75 keyspacingx, 0.5 keyspacingy + 5 ]
+            shift: [ 0.75 keyspacingx, 0.5 keyspacingy ]
           - ref: thumbfan_near_default
-            shift: [ -0.5 keyspacingx, 0 ]
-            affect: x
+            shift: [ 0.5 keyspacingx + 5, (0.5 keyspacingy + key_outermargin)]
           - ref: thumbfan_near_default
-            shift: [ -0.5 keyspacingx, 0 ]
-            affect: y
+            shift: [ -(0.5 keyspacingx + key_outermargin), (0.5 keyspacingy + key_outermargin)]
 
     raw:
       add_matrix_outline:
@@ -327,7 +332,7 @@ outlines:
       - type: polygon
         points:
           - ref: thumbfan_home_default
-            shift: [ 0.75 keyspacingx, -(0.5 keyspacingy + key_outermargin)]
+            shift: [ 0, -(0.5 keyspacingy + key_outermargin)]
           - ref: componentarea_default_default
             shift: [ 0.5 componentarea_width, -0.5 componentarea_height ]
           - ref: componentarea_default_default
@@ -344,13 +349,14 @@ outlines:
         side: left
         size: [ choc_cutout_width, choc_cutout_height ]
         bound: false
-        tags: [key_1u, key_15u]
+        tags: [is_key]
         
     _screwholes:
       # Bottom right
       - type: circle
         anchor:
-          - ref: [matrix_innermost_bottom, thumbfan_near_default]
+          - ref: [matrix_innermost_bottom]
+            shift: [0, -(0.5 keyspacingy + 2 screwhole_radius)]
             affect: y
           - ref: matrix_innermost_bottom
             affect: x
