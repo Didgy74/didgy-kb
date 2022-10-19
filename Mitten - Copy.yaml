@@ -1,0 +1,190 @@
+units:
+  choc_cutout_width: 13.75
+  choc_cutout_height: choc_cutout_width
+  
+  promicro_width: 18
+  promicro_height: 38
+  mcuarea_width: promicro_width
+  mcuarea_height: promicro_height
+  mcuarea_bottom_offset_height: 3
+  mcuarea_outermargin: 0.25
+  componentarea_width: mcuarea_width + 0.5
+  componentarea_height: mcuarea_height - mcuarea_bottom_offset_height
+  
+  
+  # Configurable values
+  keyspacingx: cx
+  keyspacingy: cy
+  key_outermargin: 1
+  keycap_width: keyspacingx - 0.5
+  keycap_height: keyspacingy - 0.5
+  choc_keycap_cornerradius: 2
+  key_chocsocket_margin: 1
+  outline_corner_radius: 2
+  componentarea_offsety: -3
+  thumbfan_outer_rotate: -0
+  thumbfan_offsety: 2
+  
+  pinky_splay: 0
+  ring_splay: 5
+  
+  ring_stagger: 10
+  middle_stagger: 5
+  index_stagger: 10
+  innermost_stagger: 8
+  
+  
+  # Not configurable
+  sum_splay: pinky_splay + ring_splay 
+  
+  visual_x: 1
+  visual_y: 1
+  
+
+points:
+
+  zones:
+    matrix:
+      rotate: 10
+      key:
+        padding: keyspacingy
+        width: keyspacingx
+        height: keyspacingy
+        tags:
+          switch_cutout: true
+          key_1u: true
+          
+        # Footprints for key-switches.  
+        footprints: &key_footprints
+          choc_hotswap:
+            type: choc
+            params:
+              hotswap: true
+              reverse: true
+              keycaps: true
+            nets:
+              from: GND
+              to: =button_pin
+            anchor:
+              rotate: 0
+          choc_nonhotswap:
+            type: choc
+            params:
+              hotswap: false
+              reverse: true
+              keycaps: true
+            nets:
+              from: GND
+              to: =button_pin
+            anchor:
+              rotate: 180
+      columns:
+        pinky:
+          rotate: 0
+          rows:
+            bottom:
+              button_pin: P7
+            home:
+              rotate: 5
+              shift: [-0.75, 0.75]
+              button_pin: P15
+            topmost:
+              rotate: 10
+              shift: [-3.1, 1.5]
+              button_pin: P2
+        ring:
+          origin: [ -0.5 keyspacingx, -0.5 keyspacingy ]
+          rotate: -5
+          stagger: ring_stagger
+          spread: keyspacingx
+          rows:
+            bottom:
+              button_pin: P10
+            home:
+              rotate: 2.5
+              shift: [-0.4, 0.4]
+              button_pin: P18
+            topmost:
+              rotate: 5
+              shift: [-1.5, 0.75]
+              button_pin: P3
+        middle:
+          origin: [ -0.5 keyspacingx, -0.5 keyspacingy ]
+          rotate: -ring_splay
+          stagger: middle_stagger
+          spread: keyspacingx
+          rows:
+            bottom:
+              button_pin: P16
+            home:
+              button_pin: P19
+            topmost:
+              button_pin: P4
+        index:
+          stagger: -index_stagger
+          spread: keyspacingx
+          rows:
+            bottom:
+              button_pin: P14
+            home:
+              button_pin: P20
+            topmost:
+              button_pin: P5
+        innermost:
+          stagger: keyspacingy - innermost_stagger
+          spread: keyspacingx
+          rows:
+            bottom:
+              button_pin: P21
+            topmost:
+              button_pin: P6
+    thumbfan:
+      anchor:
+        - ref: matrix_index_bottom
+          shift: [0, -(0.5 keyspacingx + 0.5 keyspacingy)]
+          affect: y
+        - ref: matrix_innermost_bottom
+          shift: [0.5 keyspacingx, 0]
+          affect: x
+        - shift: [0, thumbfan_offsety]
+      key:
+        width: keyspacingx
+        height: keyspacingy
+        tags.switch_cutout: true
+        rotate: 90
+        footprints: *key_footprints
+      columns:
+        home:
+          key.width: 1.5 keyspacingx
+          rows:
+            default:
+              tags.key_15u: true
+              button_pin: P9
+        near:
+          rotate: 15
+          origin: [ 0.5 keyspacingy, -0.5 keyspacingx ]
+          spread: -keyspacingy
+          rows:
+            default:
+              tags.key_1u: true
+              button_pin: P8
+             
+outlines:
+  exports:
+
+    # Outline of keycaps. Only meant for visualization.
+    keycaps:
+      main:
+        type: keys
+        side: left
+        size: [ keycap_width, keycap_height ]
+        bound: false
+        corner: choc_keycap_cornerradius
+        tags: [key_1u]
+      main2:
+        type: keys
+        side: left
+        size: [ 1.5 keycap_width, keycap_height ]
+        bound: false
+        corner: choc_keycap_cornerradius
+        tags: [key_15u]

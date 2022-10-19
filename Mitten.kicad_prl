@@ -33,9 +33,12 @@
       3,
       4,
       5,
+      6,
+      7,
       8,
       9,
       10,
+      11,
       12,
       13,
       14,
@@ -64,7 +67,7 @@
     "zone_display_mode": 0
   },
   "meta": {
-    "filename": "samoklava2_pcb.kicad_prl",
+    "filename": "Mitten.kicad_prl",
     "version": 3
   },
   "project": {

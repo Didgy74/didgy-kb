@@ -4,26 +4,19 @@ A catch-all repo for any keyboards I design.
 These designs are all designed with [Ergogen](https://github.com/ergogen/ergogen).
 
 # Mitten
-**Proper real-life image coming soon**
-
-**Note: This design has not been tested yet**
-![Mitten layout](https://user-images.githubusercontent.com/25203601/156046583-952bedf7-c728-4c2f-b3b5-7066d6396dc0.png)
-
-**Note: The following PCB is slightly outdated**
-![image](https://user-images.githubusercontent.com/25203601/156047663-6b54d818-8cf3-40c7-9c49-15d928bcadfc.png)
-
 
 This design has the following properties:
- - 32 keys (5 columns, 3 rows with one row missing 1 key, plus 2 thumbkeys, per hand)
+ - 30 keys
  - Split
  - Columnar stagger
  - Column splay on the outer columns
  - Wireless
- - Hot-swappable
  - Reversible PCB
- - Low profile (Choc V1)
- - Choc spacing
- - Uses primarily 1u keys, with a 1.5u home thumbkey.
+ - (Very) Low profile (Choc Mini)
+ - Choc spacing in Y direction
+ - MX spacing in X direction
+ - 1u keys for fingers
+ - 1.5u keys for thumbs
  - Includes mountplate
  - Standard ProMicro support (Note that it's wireless only, so use a compatible MCU with Bluetooth connectivity)
 
@@ -31,11 +24,40 @@ This design has the following properties:
 In short, this design is heavily inspired by the [Ferris](https://github.com/pierrechevalier83/ferris) (or more specifically, the [Sweep](https://github.com/davidphilipbarr/Sweep)). This keyboard is very similar with a few key design differences:
  - Stagger adjusted for hands that have a short index finger
  - Outer columns are splayed
- - Removed one key from innermost column, and heavily increased columnar stagger of that column
- - Choc V1 hotswap sockets
- - Larger home thumbkey (1.5u)
+ - Removed one key from innermost column and outermost column.
+ - Choc Mini support
+ - Larger thumbkeys (1.5u)
  - Designed for wireless operation **only**
  - Includes mountplate
+ 
+ 
+### Information
+
+**Main PCB thickness:** 1.6mm
+**Mount plate thickness:** 1.6mm
+Mount plate is mostly for making the design sturdier and holding keys in place a bit better.
+**Connector:** Molex PicoBlade 2-pin horizontal (Often mislabeled as Micro JST in stores)
+**Key switches:** Kailh Choc Mini PG1232 (https://www.aliexpress.com/item/4000277394324.html)
+Personal note: Try using 35g springs with linear (black) motion.
+**MCU sockets:** Mill-Max Interconnect Machined Pin Socket. Pitch 2.54mm. Height above PCB: 7mm. Part no. 801-XX-XXX-10-001000. You need at least 12 pins wide, any more can be broken off.
+**Underside material:** Neoprene (need actual testing still)
+**Keycaps:** MBK profile Choc (https://splitkb.com/collections/switches-and-keycaps/products/blank-mbk-choc-low-profile-keycaps)
+**Power switch:** 7-pin micro SPDT
+**MCU:** nice!nano
+Xiao Seeed was considered for its smaller size, but since battery is mounted under the MCU, the battery would have to become too small anyways.
+**MCU socket pins:** Mill-Max gold pins. Part no. 3320-0-00-15-00-00-03-0. (https://splitkb.com/collections/keyboard-parts/products/mill-max-low-profile-sockets?variant=32170972020813)
+These could be thicker / longer, fit is not very good.
+
+
+
+### Instructions
+
+The MCU has to be mounted **face down** by default.
+
+By default, all jumpers need to be shorted on the **opposite side** of where components are mounted.
+
+
+
 
 ### Future design work
 I intend to keep iterating on this design over time, here are a few ideas I would like to eventually realize:
